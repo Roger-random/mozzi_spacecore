@@ -1,6 +1,6 @@
 /*
  * Sketch using a modified Mozzi SampleHuffman class to play an audio sample
- * at the press of the button (when pin D4 is held low.)
+ * at pseudorandom time intervals.
  * 
  * Audio is a version of "SPAAACE!" from Valve Software's Portal 2.
  * Downloaded from https://theportalwiki.com/wiki/Core_voice_lines
@@ -17,17 +17,26 @@
 
 SampleHuffman spacecore(space_core_SOUNDDATA,space_core_HUFFMAN,space_core_SOUNDDATA_BITS);
 
-#define PLAY_PIN 4
-
 boolean playing;
+unsigned long nextPlay;
 
 void setup() {
-  // Configure button pin for input with internal pullup resistor.
-  pinMode(PLAY_PIN, INPUT_PULLUP);
+  // Set analong zero to be input reading ambient noise for random seed.
+  pinMode(A0, INPUT);
 
   // Start running Mozzi, but don't start playing sound yet.
   startMozzi();
   playing = false;
+
+  // Read two analog values from A0, use the second as random seed.
+  // I don't understand why so many Arduino sketches throw away the first read, but
+  // if there's a good reason I'm following suit. If there's no good reason... well
+  // it doesn't delay my program that much.
+  analogRead(0);
+  randomSeed(analogRead(0));
+
+  // Play once immediately so we know audio circuit works.
+  nextPlay = millis();
 }
 
 // If playing, stop playing if sample is complete.
@@ -36,10 +45,11 @@ void updateControl(){
   if (playing) {
     if (spacecore.complete()) {
       playing = false;
+      // Randomly choose amount of time before next play
+      nextPlay = millis() + random( 15*1000, 120*1000 );
     }
   } else {
-    if (digitalRead(PLAY_PIN) == LOW) {
-      // Since we don't check again until sample is done, there is no need to debounce
+    if (millis() > nextPlay) {
       spacecore.start();
       playing = true;
     }
