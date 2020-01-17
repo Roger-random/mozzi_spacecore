@@ -13,9 +13,9 @@
 
 #include <MozziGuts.h>
 #include "SampleHuffman.h"
-#include "spacewav.h"
+#include "wilhelm.h"
 
-SampleHuffman spacecore(space_core_SOUNDDATA,space_core_HUFFMAN,space_core_SOUNDDATA_BITS);
+SampleHuffman wilhelm(wilhelm_scream_SOUNDDATA,wilhelm_scream_HUFFMAN,wilhelm_scream_SOUNDDATA_BITS);
 
 #define PLAY_PIN 4
 
@@ -25,8 +25,6 @@ void setup() {
   // Configure button pin for input with internal pullup resistor.
   pinMode(PLAY_PIN, INPUT_PULLUP);
 
-  // Start running Mozzi, but don't start playing sound yet.
-  startMozzi();
   playing = false;
 }
 
@@ -34,14 +32,9 @@ void setup() {
 // If not playing, start playing if pin is held low.
 void updateControl(){
   if (playing) {
-    if (spacecore.complete()) {
+    if (wilhelm.complete()) {
       playing = false;
-    }
-  } else {
-    if (digitalRead(PLAY_PIN) == LOW) {
-      // Since we don't check again until sample is done, there is no need to debounce
-      spacecore.start();
-      playing = true;
+      stopMozzi();
     }
   }
 }
@@ -49,14 +42,19 @@ void updateControl(){
 // If playing, return next audio sample.
 // Otherwise return silence.
 int updateAudio(){
-  if (playing) {
-    return spacecore.next();
-  } else {
-    return 0;
-  }
+  return wilhelm.next();
 }
 
 
 void loop() {
-  audioHook();
+  if (playing) {
+    audioHook();
+  } else {
+    if (digitalRead(PLAY_PIN) == LOW) {
+      // Since we don't check again until sample is done, there is no need to debounce
+      wilhelm.start();
+      playing = true;
+      startMozzi();
+    }
+  }
 }
