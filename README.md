@@ -1,6 +1,6 @@
 # Mozzi Space Core
 
-Sketch using a modified Mozzi SampleHuffman class to play an audio sample at the press of the button (when pin D4 is held low.) Audio output as per standard Mozzi conventions, pin D9 on an Arduino.
+Sketch using a modified Mozzi SampleHuffman class to play an audio sample pseudo-random time intervals. Audio output as per standard Mozzi conventions, pin D9 on an Arduino.
 
 Audio is a version of "SPAAACE!" from Valve Software's Portal 2 downloaded from [Portal Wiki](https://theportalwiki.com/wiki/Core_voice_lines) and downsampled using [Audacity](https://www.audacityteam.org/) to fit within flash memory of an Arduino
 
