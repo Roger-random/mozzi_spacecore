@@ -1,13 +1,12 @@
 /*
  * Sketch using a modified Mozzi SampleHuffman class to play an audio sample
  * at the press of the button (when pin D4 is held low.)
- * 
- * Audio is a version of "SPAAACE!" from Valve Software's Portal 2.
- * Downloaded from https://theportalwiki.com/wiki/Core_voice_lines
+ *
+ * Plays classic Wilhelm scream https://en.wikipedia.org/wiki/Wilhelm_scream
+ * Downloaded from https://archive.org/details/WilhelmScreamSample
  * Downsampled using Audacity to fit within flash memory of an Arduino
  * 
  * Mozzi library released by Tim Barrass under CC-BY-NC-SA
- * Audio sample property of Valve Software, Inc.
  * This sketch released by Roger Cheng under MIT License
  */
 
